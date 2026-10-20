@@ -1071,15 +1071,15 @@
                         <div class="matrix-meta-list">
                             <div class="matrix-meta-item">
                                 <strong>Behörde</strong>
-                                <span id="meta-authority">Jobcenter AHA Kreis Soest</span>
+                                <span id="meta-authority">Jobcenter Musterstadt</span>
                             </div>
                             <div class="matrix-meta-item">
                                 <strong>Bescheiddatum</strong>
-                                <span id="meta-date">20.04.2026</span>
+                                <span id="meta-date">15.10.2026</span>
                             </div>
                             <div class="matrix-meta-item">
                                 <strong>Streitbetrag</strong>
-                                <span id="meta-amount" style="color:var(--brand-yellow); font-weight:bold;">1.763,72 €</span>
+                                <span id="meta-amount" style="color:var(--brand-yellow); font-weight:bold;">384,50 €</span>
                             </div>
                         </div>
                     </div>
@@ -1094,7 +1094,7 @@
                         <span style="font-size:0.75rem; color:var(--brand-orange); font-weight:800;">§ 78 / § 84 SGG</span>
                     </div>
                     <div class="matrix-body">
-                        <p><strong>Widerspruchsfrist bis: <span id="out-deadline-date" style="color:var(--brand-yellow); font-size:1.05rem;">24.05.2026</span></strong></p>
+                        <p><strong>Widerspruchsfrist bis: <span id="out-deadline-date" style="color:var(--brand-yellow); font-size:1.05rem;">18.11.2026</span></strong></p>
                         <p style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">
                             Berechnung: Ausstellungsdatum + 3 Tage gesetzliche Postlaufzeit-Fiktion (§ 37 Abs. 2 SGB X) + 1 Monat Rechtsbehelfsfrist (§ 84 Abs. 1 SGG).
                         </p>
@@ -1271,11 +1271,11 @@ Der Bescheid beruht auf einer unvollständigen und fehlerhaften Tatsachenermittl
         const TRANSLATIONS = {
             DE: {
                 label: "SPRACHE: DEUTSCH",
-                explanation: "Das Jobcenter fordert die Erstattung angeblich überzahlter Leistungen für den Monat April 2026 und behauptet einen Zufluss von 1.763,72 €. Diese Behauptung widerspricht dem tatsächlichen Konto- und Krankengeldverlauf eklatant.",
+                explanation: "Das Jobcenter behauptet, im Berechnungszeitraum habe ein unberücksichtigtes Einkommen in Höhe von 384,50 € vorgelegen. Die Behörde fordert daher eine Erstattung, ohne die tatsächlichen Zuflüsse und Freibeträge korrekt zu berücksichtigen.",
                 actions: [
                     "Kontoauszüge des fraglichen Monats auf tatsächlichen Geldeingang prüfen (Null-Zufluss-Nachweis).",
                     "Fristwahrenden Widerspruch über den bereitgestellten Schriftsatzbaustein einreichen.",
-                    "Vorlage der IKK-Mitgliedsbescheinigung (Ende Krankengeldanspruch) zur Akte reichen."
+                    "Nachweise über Freibeträge gem. § 11b SGB II bzw. Belege zur Akte reichen."
                 ],
                 isRtl: false
             },
@@ -1285,17 +1285,17 @@ Der Bescheid beruht auf einer unvollständigen und fehlerhaften Tatsachenermittl
                 actions: [
                     "Check bank statements for the relevant period to prove zero real money inflow.",
                     "Submit the prepared formal German objection before the statutory deadline expires.",
-                    "Provide the health insurance certification proving that sickness cash benefits had ended."
+                    "Submit proof of statutory allowances under § 11b SGB II."
                 ],
                 isRtl: false
             },
             TR: {
                 label: "DİL: TÜRKÇE",
-                explanation: "Jobcenter, Nisan 2026 ayı için 1.763,72 € tutarında gelir elde ettiğinizi iddia ederek fazla ödenen yardımların iadesini talep ediyor. Bu iddia, banka hesap dökümleriniz ve kesilen hastalık parası gerçeğiyle tamamen çelişmektedir.",
+                explanation: "Jobcenter, Nisan 2026 ayı için 384,50 € tutarında gelir elde ettiğinizi iddia ederek fazla ödenen yardımların iadesini talep ediyor. Bu iddia, banka hesap dökümleriniz ve kesilen hastalık parası gerçeğiyle tamamen çelişmektedir.",
                 actions: [
                     "Nisan ayına ait banka hesap dökümünü kontrol ederek hesaba para girmediğini belgeleyin.",
                     "Verilen Almanca itiraz metnini süre dolmadan Jobcenter'a resmi olarak iletin.",
-                    "Hastalık parasının bittiğine dair sağlık sigortası (IKK) belgesini dosyaya ekleyin."
+                    "§ 11b SGB II kapsamındaki muafiyet belgelerini dosyaya ekleyin."
                 ],
                 isRtl: false
             },
@@ -1305,7 +1305,7 @@ Der Bescheid beruht auf einer unvollständigen und fehlerhaften Tatsachenermittl
                 actions: [
                     "فحص كشف الحساب البنكي لإثبات عدم دخول أي مبالغ مالية خلال الشهر المذكور.",
                     "تقديم الاعتراض الرسمي المرفق باللغة الألمانية قبل انتهاء المهلة القانونية.",
-                    "إرفاق شهادة التأمين الصحي (IKK) التي تثبت انتهاء إعانة المرض."
+                    "إرفاق المستندات الخاصة بحدود الإعفاء المالي وفقًا للمادة § 11b SGB II."
                 ],
                 isRtl: true
             },
@@ -1315,7 +1315,7 @@ Der Bescheid beruht auf einer unvollständigen und fehlerhaften Tatsachenermittl
                 actions: [
                     "Перевірити виписку з банківського рахунку, щоб документально підтвердити нульове надходження коштів.",
                     "Вчасно подати підготовлене заперечення офіційною німецькою мовою до закінчення терміну.",
-                    "Долучити довідку від лікарняної каси (IKK) про припинення виплати лікарняних."
+                    "Надати докази щодо пільг та неоподатковуваного мінімуму за § 11b SGB II."
                 ],
                 isRtl: false
             },
@@ -1325,7 +1325,7 @@ Der Bescheid beruht auf einer unvollständigen und fehlerhaften Tatsachenermittl
                 actions: [
                     "Проверить банковскую выписку за апрель для подтверждения отсутствия фактического дохода.",
                     "Подать подготовленное официальное возражение на немецком языке до истечения срока.",
-                    "Приложить справку из больничной кассы (IKK) об окончании права на выплату пособия по болезни."
+                    "Приложить документы о необлагаемом минимуме согласно § 11b SGB II."
                 ],
                 isRtl: false
             }
@@ -1463,10 +1463,10 @@ Der Bescheid beruht auf einer unvollständigen und fehlerhaften Tatsachenermittl
 
             const logSequence = [
                 { delay: 350, step: 1, text: "> Phase 0: OCR-Extraktion aktiv (Multipage & Layout Check) ..." },
-                { delay: 850, step: 2, text: "> Phase 1: Metadaten gebunden (Az: 38302//0022696, Bescheid: 20.04.2026) ..." },
+                { delay: 850, step: 2, text: "> Phase 1: Metadaten gebunden (Az: 12345//67890, Bescheid: 15.10.2026) ..." },
                 { delay: 1400, step: 2, text: "> Prüfe auf Prompt Injection & Datenintegrität: OK" },
-                { delay: 1950, step: 3, text: "> Phase 2: 4-Säulen-Matrix (Ist: 1.763,72 € vs. Soll: 0,00 € Zufluss) ..." },
-                { delay: 2500, step: 3, text: "> Phase 3: § 37 Abs. 2 SGB X Fristenrechner -> Deadline: 24.05.2026" },
+                { delay: 1950, step: 3, text: "> Phase 2: 4-Säulen-Matrix (Ist: 384,50 € vs. Soll: 0,00 € Zufluss) ..." },
+                { delay: 2500, step: 3, text: "> Phase 3: § 37 Abs. 2 SGB X Fristenrechner -> Deadline: 18.11.2026" },
                 { delay: 3000, step: 4, text: "> Phase 4: Guardian-Audit abgeschlossen [Flag: CONFLICT/ESCALATE]" },
                 { delay: 3500, step: 4, text: "> Phase 5: Amtsdeutsch-Widerspruchsbaustein verifiziert" }
             ];
@@ -1545,8 +1545,8 @@ Der Bescheid beruht auf einer unvollständigen und fehlerhaften Tatsachenermittl
                 "BEGIN:VEVENT",
                 "SUMMARY:Widerspruchsfrist Jobcenter Bescheid!",
                 "DESCRIPTION:Letzter Tag für fristwahrenden Widerspruch gem. § 84 SGG. Schriftsatz aus Chaos Shredder einreichen.",
-                "DTSTART;VALUE=DATE:20260524",
-                "DTEND;VALUE=DATE:20260525",
+                "DTSTART;VALUE=DATE:20261118",
+                "DTEND;VALUE=DATE:20261119",
                 "STATUS:CONFIRMED",
                 "PRIORITY:1",
                 "BEGIN:VALARM",
@@ -1562,7 +1562,7 @@ Der Bescheid beruht auf einer unvollständigen und fehlerhaften Tatsachenermittl
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'Frist_Widerspruch_20260524.ics';
+            a.download = 'Frist_Widerspruch_20261118.ics';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
