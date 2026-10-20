@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chaos Shredder TiK-OS Lite</title>
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --bg-panel: #0d131f;
+            --surface: #131a26;
+            --surface-accent: #1e293b;
+            --surface-hover: #273549;
+            --brand-orange: #ea580c;
+            --brand-orange-light: #f97316;
+            --brand-yellow: #f59e0b;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-glow: #1e293b;
+            --border-active: #ea580c;
+            --success: #10b981;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --purple: #a855f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Top Header & Operator Billboard */
+        .master-header {
+            background: linear-gradient(180deg, #131a26 0%, #090d16 100%);
+            border-bottom: 2px solid var(--brand-orange);
+            padding: 16px 20px;
+            position: relative;
+        }
+
+        .header-inner {
+            max-width: 1380px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand-cluster {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon-box {
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, var(--brand-yellow), var(--brand-orange));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 16px rgba(234, 88, 12, 0.4);
+            flex-shrink: 0;
+        }
+
+        .brand-text h1 {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-text h1 span {
+            color: var(--brand-orange);
+        }
+
+        .brand-sub {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--brand-yellow);
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .operator-hero-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border-glow);
+            padding: 8px 16px;
+            border-radius: 40px;
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+        }
+
+        .operator-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #000;
+            border: 2px solid var(--brand-orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 0 10px rgba(234, 88, 12, 0.5);
+        }
+
+        .operator-meta {
+            text-align: left;
+        }
+
+        .operator-name {
+            font-size: 0.82rem;
+            font-weight: 900;
+            color: var(--brand-orange);
+            letter-spacing: 0.8px;
+        }
+
+        .operator-claim {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            letter-spacing: 0.4px;
+        }
+
+        /* 3-Spalten Hauptlayout */
+        .app-layout {
+            max-width: 1380px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 240px 1fr 340px;
+            gap: 16px;
+            flex: 1;
+        }
+
+        @media (max-width: 1100px) {
+            .app-layout {
+                grid-template-columns: 1fr 340px;
+            }
+            .sidebar-col {
+                display: none;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+                padding: 12px;
+            }
+            .side-col-right {
+                order: 3;
+            }
+        }
+
+        /* Linke Sidebar */
+        .sidebar-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-glow);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: fit-content;
+        }
+
+        .sidebar-brand-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--surface-accent);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: transparent;
+            border: 1px solid transparent;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu-btn:hover {
+            background: var(--surface);
+            color: var(--text-light);
+            border-color: var(--border-glow);
+        }
+
+        .sidebar-menu-btn.active {
+            background: linear-gradient(90deg, rgba(234, 88, 12, 0.15) 0%, transparent 100%);
+            border-left: 3px solid var(--brand-orange);
+            color: var(--brand-orange);
+            font-weight: bold;
+        }
+
+        .operator-sidebar-box {
+            background: var(--surface);
+            border: 1px solid var(--border-glow);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .hitl-tag {
+            font-size: 0.68rem;
+            color: var(--brand-yellow);
+            font-weight: bold;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .system-online-pill {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--success);
+            box-shadow: 0 0 8px var(--success);
+            animation: pulse-soft 1.6s infinite alternate;
+        }
+
+        @keyframes pulse-soft {
+            0% { opacity: 0.4; }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* Mittlere Spalte: Hauptarbeitsbereich */
+        .main-col {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .workspace-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-glow);
+            border-radius: 14px;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Upload Zone */
+        .upload-section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .upload-section-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .dropzone-box {
+            background: var(--surface);
+            border: 2px dashed var(--brand-orange);
+            border-radius: 14px;
+            padding: 36px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .dropzone-box:hover, .dropzone-box.drag-over {
+            border-color: var(--brand-yellow);
+            background: rgba(234, 88, 12, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .dropzone-icon {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(234, 88, 12, 0.4));
+        }
+
+        .dropzone-primary-text {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--brand-orange);
+            margin-bottom: 6px;
+        }
+
+        .dropzone-format-info {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .file-chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+            justify-content: center;
+        }
+
+        .file-chip {
+            background: var(--surface-accent);
+            border: 1px solid var(--brand-orange);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #e2e8f0;
+        }
+
+        /* Sprache selektieren */
+        .language-picker-wrap {
+            margin-top: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border-glow);
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+
+        .language-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .lang-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 500px) {
+            .lang-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .lang-grid input[type="radio"] {
+            display: none;
+        }
+
+        .lang-grid label {
+            background: var(--surface-accent);
+            color: var(--text-muted);
+            border: 1px solid var(--border-glow);
+            padding: 8px 0;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-grid input[type="radio"]:checked + label {
+            background: var(--brand-orange);
+            color: #fff;
+            border-color: var(--brand-yellow);
+            box-shadow: 0 0 10px rgba(234, 88, 12, 0.4);
+        }
+
+        /* Trigger Button */
+        .action-run-box {
+            margin-top: 16px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-shred-main {
+            flex: 1;
+            background: linear-gradient(135deg, var(--brand-orange) 0%, #c2410c 100%);
+            color: #fff;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 16px rgba(234, 88, 12, 0.35);
+            transition: all 0.2s;
+        }
+
+        .btn-shred-main:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.5);
+            background: linear-gradient(135deg, var(--brand-orange-light) 0%, var(--brand-orange) 100%);
+        }
+
+        .btn-shred-main:active {
+            transform: translateY(1px);
+        }
+
+        /* 4 Phasen Progress Kette */
+        .phases-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 20px;
+            padding: 12px 10px;
+            background: var(--surface);
+            border-radius: 10px;
+            border: 1px solid var(--border-glow);
+        }
+
+        .stepper-track {
+            position: absolute;
+            left: 36px;
+            right: 36px;
+            height: 2px;
+            background: var(--surface-accent);
+            z-index: 1;
+        }
+
+        .stepper-progress {
+            position: absolute;
+            left: 36px;
+            width: 0%;
+            height: 2px;
+            background: var(--brand-orange);
+            z-index: 2;
+            transition: width 0.4s ease;
+        }
+
+        .step-node {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--surface-accent);
+            border: 2px solid var(--border-glow);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            transition: all 0.3s;
+        }
+
+        .step-node.active .step-circle {
+            background: var(--brand-orange);
+            border-color: var(--brand-yellow);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(234, 88, 12, 0.6);
+        }
+
+        .step-node.done .step-circle {
+            background: var(--success);
+            border-color: var(--success);
+            color: #fff;
+        }
+
+        .step-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .step-node.active .step-label {
+            color: var(--brand-yellow);
+        }
+
+        .step-node.done .step-label {
+            color: var(--success);
+        }
+
+        /* 4-Säulen Output Matrix */
+        .output-matrix-container {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 16px;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .matrix-box {
+            background: var(--surface);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 16px;
+            position: relative;
+        }
+
+        .matrix-box.accent-orange {
+            border-left: 4px solid var(--brand-orange);
+        }
+
+        .matrix-box.accent-blue {
+            border-left: 4px solid var(--info);
+        }
+
+        .matrix-box.accent-red {
+            border-left: 4px solid var(--danger);
+        }
+
+        .matrix-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .matrix-title {
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: var(--brand-yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .matrix-badge-flag {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .matrix-body {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+
+        .matrix-meta-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+            background: #090d16;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .matrix-meta-item strong {
+            color: var(--text-muted);
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .btn-matrix-action {
+            background: var(--surface-accent);
+            color: #fff;
+            border: 1px solid var(--border-glow);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-top: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-matrix-action:hover {
+            background: var(--brand-orange);
+            border-color: var(--brand-yellow);
+        }
+
+        .btn-matrix-action.primary-blue {
+            background: #1d4ed8;
+            border-color: #3b82f6;
+        }
+
+        .btn-matrix-action.primary-blue:hover {
+            background: #2563eb;
+        }
+
+        .draft-code-block {
+            background: #090d16;
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: ui-monospace, Menlo, Consolas, monospace;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            margin-top: 8px;
+        }
+
+        .rtl-box {
+            direction: rtl;
+            text-align: right;
+        }
+
+        /* Rechte Spalte: Terminal & Systemstatus */
+        .side-col-right {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Live Terminal */
+        .terminal-panel {
+            background: #04060a;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 14px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+        }
+
+        .terminal-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #131a26;
+            margin-bottom: 10px;
+        }
+
+        .terminal-heading {
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-live {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-live.online {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        .beacon-mini {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 6px currentColor;
+        }
+
+        .terminal-stream {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            line-height: 1.55;
+            min-height: 160px;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+
+        .terminal-stream .log-row {
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+
+        .terminal-stream .log-row.active {
+            color: var(--brand-yellow);
+            font-weight: bold;
+        }
+
+        .terminal-stream .log-row.done {
+            color: var(--success);
+        }
+
+        .terminal-stream .log-row.warn {
+            color: var(--brand-orange);
+        }
+
+        /* Status Kasten */
+        .system-status-panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .status-header-text {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--brand-yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .status-metric-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.78rem;
+        }
+
+        .status-metric-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #cbd5e1;
+        }
+
+        .metric-bullet {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-metric-value {
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            font-family: monospace;
+        }
+
+        /* Post-It Sticker */
+        .postit-card {
+            background: linear-gradient(135deg, #fef08a 0%, #facc15 100%);
+            color: #1e1b4b;
+            padding: 16px;
+            border-radius: 4px;
+            transform: rotate(-1.5deg);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+            border-left: 3px solid rgba(0,0,0,0.15);
+            margin-top: 10px;
+        }
+
+        .postit-title {
+            font-size: 1.15rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .postit-sub {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #4338ca;
+            margin-top: 6px;
+        }
+
+        /* Footer & Hazard Stripes */
+        .hazard-banner {
+            margin-top: auto;
+            background: repeating-linear-gradient(
+                -45deg,
+                #ea580c,
+                #ea580c 18px,
+                #090d16 18px,
+                #090d16 36px
+            );
+            height: 16px;
+            width: 100%;
+        }
+
+        .master-footer {
+            background: #06090f;
+            border-top: 1px solid var(--border-glow);
+            padding: 20px 16px;
+            text-align: center;
+        }
+
+        .footer-content-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.74rem;
+            color: var(--text-muted);
+        }
+
+        .footer-badges {
+            display: flex;
+            gap: 16px;
+            font-weight: 600;
+        }
+
+        .footer-badges span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Toast Popup */
+        .toast-notify {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--surface);
+            border: 1px solid var(--brand-orange);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            display: none;
+            z-index: 9999;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header mit TiK-OS Brand und Agent Angry Operator-Profil -->
+    <header class="master-header">
+        <div class="header-inner">
+            <div class="brand-cluster">
+                <div class="brand-icon-box">⚡</div>
+                <div class="brand-text">
+                    <h1>CHAOS <span>SHREDDER</span></h1>
+                    <div class="brand-sub">TiK-OS • DOKUMENTE. ANALYSIEREN. KLÄREN. SHREDDERN.</div>
+                </div>
+            </div>
+
+            <div class="operator-hero-badge">
+                <div class="operator-avatar">🕶️</div>
+                <div class="operator-meta">
+                    <div class="operator-name">AGENT ANGRY 👑</div>
+                    <div class="operator-claim">Prüft. Hinterfragt. Schützt. [HitL Core]</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hauptbereich -->
+    <main class="app-layout">
+        
+        <!-- Linke Spalte: Sidebar & Navigation -->
+        <aside class="sidebar-col">
+            <div class="sidebar-card">
+                <div class="sidebar-brand-mini">
+                    <span style="color:var(--brand-yellow); font-size: 1.1rem; font-weight:900;">T¡K</span>
+                    <span style="font-size:0.8rem; color:var(--text-muted); font-weight:bold;">Chaos Shredder Lite</span>
+                </div>
+
+                <ul class="sidebar-menu">
+                    <li><button class="sidebar-menu-btn active"><span>🏠</span> Start</button></li>
+                    <li><button class="sidebar-menu-btn" onclick="showInfoToast('Dokumenten-Historie: Vor Ort verschlüsselt.')"><span>📁</span> Dokumente</button></li>
+                    <li><button class="sidebar-menu-btn" onclick="showInfoToast('Analyse-Engine: Deterministische 4-Säulen-Matrix.')"><span>🔍</span> Analyse</button></li>
+                    <li><button class="sidebar-menu-btn" onclick="showInfoToast('Cockpit-Modus: HITL-Freigabe durch Operator.')"><span>🎛️</span> Cockpit</button></li>
+                    <li><button class="sidebar-menu-btn" onclick="showInfoToast('Einstellungen: Lokale Node & Zero-Data-Storage.')"><span>⚙️</span> Einstellungen</button></li>
+                </ul>
+
+                <div class="operator-sidebar-box">
+                    <div style="font-size: 1.4rem;">🧢🕶️</div>
+                    <div style="font-size: 0.82rem; font-weight: 800; color: var(--brand-orange); margin-top: 4px;">OPERATOR SOVEREIGNTY</div>
+                    <span class="hitl-tag">HUMAN-IN-THE-LOOP</span>
+                    <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 4px;">Keine KI entscheidet autonom. Volle menschliche Letztverantwortung.</div>
+                </div>
+
+                <div class="system-online-pill">
+                    <div class="pulse-dot"></div>
+                    <span>System Online • TiK-OS v2.4</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mittlere Spalte: Upload Hub & 4-Säulen Matrix -->
+        <section class="main-col">
+            
+            <div class="workspace-card">
+                <div class="upload-section-title">
+                    <span>📄 Dokument hochladen</span>
+                </div>
+                <div class="upload-section-sub">Einfach fotografieren, Bilddatei oder mehrseitiges PDF auswählen.</div>
+
+                <!-- Dropzone & Datei-Upload (ohne starres capture="camera", erlaubt Galerie, Kamera & PDF) -->
+                <div id="dropzone" class="dropzone-box" onclick="triggerFilePicker()">
+                    <span class="dropzone-icon">📸</span>
+                    <div class="dropzone-primary-text">Dokument scannen oder auswählen</div>
+                    <div class="dropzone-format-info">Unterstützte Formate: PDF, JPG, PNG, TIF | Max. 10 MB</div>
+                    <input type="file" id="file-input" accept="image/*,application/pdf" multiple onchange="handleFileSelected(event)">
+                </div>
+
+                <div id="file-chips" class="file-chips-container"></div>
+
+                <!-- 6-Sprachen Wähler -->
+                <div class="language-picker-wrap">
+                    <div class="language-label">
+                        <span>🌐</span>
+                        <span>Erklärungssprache für Kachel 3 & 4 wählen</span>
+                    </div>
+                    <div class="lang-grid">
+                        <input type="radio" id="lang-de" name="target_lang" value="DE" checked onchange="changeLanguage()">
+                        <label for="lang-de">DE</label>
+
+                        <input type="radio" id="lang-en" name="target_lang" value="EN" onchange="changeLanguage()">
+                        <label for="lang-en">EN</label>
+
+                        <input type="radio" id="lang-tr" name="target_lang" value="TR" onchange="changeLanguage()">
+                        <label for="lang-tr">TR</label>
+
+                        <input type="radio" id="lang-ar" name="target_lang" value="AR" onchange="changeLanguage()">
+                        <label for="lang-ar">AR</label>
+
+                        <input type="radio" id="lang-ukr" name="target_lang" value="UKR" onchange="changeLanguage()">
+                        <label for="lang-ukr">UKR</label>
+
+                        <input type="radio" id="lang-ru" name="target_lang" value="RU" onchange="changeLanguage()">
+                        <label for="lang-ru">RU</label>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="action-run-box">
+                    <button class="btn-shred-main" onclick="startShredderPipeline()">
+                        <span>💥 JETZT SHREDDERN & ANALYSIEREN</span>
+                    </button>
+                </div>
+
+                <!-- 4 Phasen Fortschrittsbalken -->
+                <div class="phases-stepper">
+                    <div class="stepper-track"></div>
+                    <div id="stepper-bar" class="stepper-progress"></div>
+
+                    <div id="step-node-1" class="step-node active">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">OCR</div>
+                    </div>
+                    <div id="step-node-2" class="step-node">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Analyse</div>
+                    </div>
+                    <div id="step-node-3" class="step-node">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Bewertung</div>
+                    </div>
+                    <div id="step-node-4" class="step-node">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Ergebnis</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Auswurf: 4-Säulen Output Matrix + Phase 5 Schriftsatz -->
+            <div id="output-matrix" class="output-matrix-container">
+                
+                <!-- Säule 1: Dokumenten-Check -->
+                <div class="matrix-box accent-red">
+                    <div class="matrix-header">
+                        <div class="matrix-title">
+                            <span>📋 1. Dokumenten-Check</span>
+                        </div>
+                        <span id="badge-doc-type" class="matrix-badge-flag">🚨 ERSTATTUNGSBESCHEID</span>
+                    </div>
+                    <div class="matrix-body">
+                        <p id="out-doc-desc">Belastender Verwaltungsakt mit Erstattungs- und Rückforderungsanspruch gem. § 50 SGB X i.V.m. § 48 SGB X.</p>
+                        <div class="matrix-meta-list">
+                            <div class="matrix-meta-item">
+                                <strong>Behörde</strong>
+                                <span id="meta-authority">Jobcenter AHA Kreis Soest</span>
+                            </div>
+                            <div class="matrix-meta-item">
+                                <strong>Bescheiddatum</strong>
+                                <span id="meta-date">20.04.2026</span>
+                            </div>
+                            <div class="matrix-meta-item">
+                                <strong>Streitbetrag</strong>
+                                <span id="meta-amount" style="color:var(--brand-yellow); font-weight:bold;">1.763,72 €</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Säule 2: Fristen-Alarm -->
+                <div class="matrix-box accent-orange">
+                    <div class="matrix-header">
+                        <div class="matrix-title">
+                            <span>⏰ 2. Fristen-Alarm</span>
+                        </div>
+                        <span style="font-size:0.75rem; color:var(--brand-orange); font-weight:800;">§ 78 / § 84 SGG</span>
+                    </div>
+                    <div class="matrix-body">
+                        <p><strong>Widerspruchsfrist bis: <span id="out-deadline-date" style="color:var(--brand-yellow); font-size:1.05rem;">24.05.2026</span></strong></p>
+                        <p style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">
+                            Berechnung: Ausstellungsdatum + 3 Tage gesetzliche Postlaufzeit-Fiktion (§ 37 Abs. 2 SGB X) + 1 Monat Rechtsbehelfsfrist (§ 84 Abs. 1 SGG).
+                        </p>
+                        <button class="btn-matrix-action" onclick="downloadCalendarFile()">
+                            <span>📅 Im Smartphone-Kalender sichern (.ics)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Säule 3: Verständlich erklärt -->
+                <div class="matrix-box">
+                    <div class="matrix-header">
+                        <div class="matrix-title">
+                            <span>🗣️ 3. Verständlich erklärt</span>
+                        </div>
+                        <span id="target-lang-badge" style="font-size:0.72rem; color:var(--text-muted); font-weight:bold;">SPRACHE: DE</span>
+                    </div>
+                    <div id="out-explanation" class="matrix-body">
+                        <!-- Wird dynamisch befüllt -->
+                    </div>
+                </div>
+
+                <!-- Säule 4: Sofortiger Aktionsplan -->
+                <div class="matrix-box accent-orange">
+                    <div class="matrix-header">
+                        <div class="matrix-title" style="color:var(--brand-orange);">
+                            <span>🔍 4. Sofortiger Aktionsplan</span>
+                        </div>
+                    </div>
+                    <div id="out-actions" class="matrix-body">
+                        <!-- Wird dynamisch befüllt -->
+                    </div>
+                </div>
+
+                <!-- Phase 5: Exekutiver Amtsdeutsch-Widerspruch -->
+                <div class="matrix-box accent-blue">
+                    <div class="matrix-header">
+                        <div class="matrix-title" style="color:#60a5fa;">
+                            <span>⚖️ Phase 5: Widerspruchsbaustein (Amtsdeutsch)</span>
+                        </div>
+                        <span class="matrix-badge-flag" style="background:rgba(59,130,246,0.2); color:#93c5fd; border-color:rgba(59,130,246,0.4);">Kopierfertig</span>
+                    </div>
+                    <div class="matrix-body">
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:6px;">
+                            Unabhängig von der gewählten Übersetzungssprache bleibt dieser Baustein im knochentrockenen Behördendeutsch:
+                        </p>
+                        <div id="out-draft" class="draft-code-block">Hiermit lege ich gegen Ihren Bescheid vom [DATUM], Az. [AKTENZEICHEN], fristwahrend
+
+WIDERSPRUCH
+
+ein.
+
+Begründung:
+Der Bescheid beruht auf einer unvollständigen und fehlerhaften Tatsachenermittlung (§ 20 SGB X). Ein angeblicher Zufluss von Einkommen lag im genannten Zeitraum nachweislich nicht vor bzw. ist durch vorrangige Abzüge und gesetzliche Freibeträge gem. § 11b SGB II vollständig aufzubrauchen. Ich fordere Sie auf, den Bescheid unverzüglich aufzuheben.</div>
+                        
+                        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                            <button class="btn-matrix-action primary-blue" onclick="copyDraftToClipboard()">
+                                <span>📋 Schriftsatz kopieren</span>
+                            </button>
+                            <button class="btn-matrix-action" onclick="downloadDraftAsFile()">
+                                <span>💾 Als Textdatei herunterladen</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Rechte Spalte: Terminal, Systemstatus & Post-It -->
+        <aside class="side-col-right">
+            
+            <!-- Live Terminal -->
+            <div class="terminal-panel">
+                <div class="terminal-topbar">
+                    <div class="terminal-heading">
+                        <span>SHREDDER TERMINAL</span>
+                    </div>
+                    <div id="terminal-live-badge" class="badge-live online">
+                        <div class="beacon-mini"></div>
+                        <span id="terminal-live-text">• LIVE</span>
+                    </div>
+                </div>
+                <div id="terminal-stream" class="terminal-stream">
+                    <div class="log-row">> TiK-OS Core Engine initialisiert ...</div>
+                    <div class="log-row">> Guardian Wächter aktiv [Zero-Data-Storage]</div>
+                    <div class="log-row">> Bereit für Dokumenten-Eingabe ...</div>
+                </div>
+            </div>
+
+            <!-- System-Status -->
+            <div class="system-status-panel">
+                <div class="status-header-text">
+                    <span>⚡ SYSTEM-STATUS</span>
+                </div>
+                <div class="status-items-list">
+                    <div class="status-metric-row">
+                        <div class="status-metric-label">
+                            <div class="metric-bullet" style="background:var(--success);"></div>
+                            <span>Bereit</span>
+                        </div>
+                        <span class="status-metric-value" id="status-val-ready">Auf Input ...</span>
+                    </div>
+
+                    <div class="status-metric-row">
+                        <div class="status-metric-label">
+                            <div class="metric-bullet" style="background:var(--brand-orange);"></div>
+                            <span>Analyse läuft</span>
+                        </div>
+                        <span class="status-metric-value" id="status-val-analysis">Standby</span>
+                    </div>
+
+                    <div class="status-metric-row">
+                        <div class="status-metric-label">
+                            <div class="metric-bullet" style="background:var(--info);"></div>
+                            <span>Warteschlange</span>
+                        </div>
+                        <span class="status-metric-value" id="status-val-queue">0 Dokumente</span>
+                    </div>
+
+                    <div class="status-metric-row">
+                        <div class="status-metric-label">
+                            <div class="metric-bullet" style="background:var(--purple);"></div>
+                            <span>Sicherheitsprüfung</span>
+                        </div>
+                        <span class="status-metric-value">Aktiv (HitL)</span>
+                    </div>
+
+                    <div class="status-metric-row">
+                        <div class="status-metric-label">
+                            <div class="metric-bullet" style="background:var(--danger);"></div>
+                            <span>Quarantäne</span>
+                        </div>
+                        <span class="status-metric-value">0 Fälle</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post-It Note -->
+            <div class="postit-card">
+                <div class="postit-title">Keine Panik.<br>Nur Prozess. 👑</div>
+                <div class="postit-sub">Struktur schlägt Behördenwillkür.</div>
+            </div>
+
+        </aside>
+
+    </main>
+
+    <!-- Hazard Stripes -->
+    <div class="hazard-banner"></div>
+
+    <!-- Master Footer mit rechtlicher Absicherung -->
+    <footer class="master-footer">
+        <div class="footer-content-inner">
+            <div class="footer-badges">
+                <span>🔒 Zero-Data-Storage Guarantee</span>
+                <span>🛡️ § 2 Abs. 1 RDG konform</span>
+                <span>⚙️ Lokale Inferenz ready</span>
+            </div>
+            <div>
+                © 2026 Agent Angry 👑 Chaos Shredder Lite • TiK-OS v2.4
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast-notify">
+        <span id="toast-text">Meldung</span>
+    </div>
+
+    <script>
+        // Mehrsprachiges Wörterbuch für Säulen 3 & 4
+        const TRANSLATIONS = {
+            DE: {
+                label: "SPRACHE: DEUTSCH",
+                explanation: "Das Jobcenter fordert die Erstattung angeblich überzahlter Leistungen für den Monat April 2026 und behauptet einen Zufluss von 1.763,72 €. Diese Behauptung widerspricht dem tatsächlichen Konto- und Krankengeldverlauf eklatant.",
+                actions: [
+                    "Kontoauszüge des fraglichen Monats auf tatsächlichen Geldeingang prüfen (Null-Zufluss-Nachweis).",
+                    "Fristwahrenden Widerspruch über den bereitgestellten Schriftsatzbaustein einreichen.",
+                    "Vorlage der IKK-Mitgliedsbescheinigung (Ende Krankengeldanspruch) zur Akte reichen."
+                ],
+                isRtl: false
+            },
+            EN: {
+                label: "LANGUAGE: ENGLISH",
+                explanation: "The Jobcenter is demanding a repayment of supposedly overpaid benefits for April 2026, alleging an income receipt of €1,763.72. This assertion contradicts the actual bank records and cessation of sickness benefits.",
+                actions: [
+                    "Check bank statements for the relevant period to prove zero real money inflow.",
+                    "Submit the prepared formal German objection before the statutory deadline expires.",
+                    "Provide the health insurance certification proving that sickness cash benefits had ended."
+                ],
+                isRtl: false
+            },
+            TR: {
+                label: "DİL: TÜRKÇE",
+                explanation: "Jobcenter, Nisan 2026 ayı için 1.763,72 € tutarında gelir elde ettiğinizi iddia ederek fazla ödenen yardımların iadesini talep ediyor. Bu iddia, banka hesap dökümleriniz ve kesilen hastalık parası gerçeğiyle tamamen çelişmektedir.",
+                actions: [
+                    "Nisan ayına ait banka hesap dökümünü kontrol ederek hesaba para girmediğini belgeleyin.",
+                    "Verilen Almanca itiraz metnini süre dolmadan Jobcenter'a resmi olarak iletin.",
+                    "Hastalık parasının bittiğine dair sağlık sigortası (IKK) belgesini dosyaya ekleyin."
+                ],
+                isRtl: false
+            },
+            AR: {
+                label: "اللغة: العربية",
+                explanation: "يطالب مركز العمل (Jobcenter) باسترداد مبالغ يدعي دفعها بالزيادة عن شهر أبريل 2026، زاعماً دخول مبلغ 1,763.72 يورو إلى حسابك. هذا الادعاء يتعارض تماماً مع كشوف الحساب الفعلية وتوقف إعانة المرض.",
+                actions: [
+                    "فحص كشف الحساب البنكي لإثبات عدم دخول أي مبالغ مالية خلال الشهر المذكور.",
+                    "تقديم الاعتراض الرسمي المرفق باللغة الألمانية قبل انتهاء المهلة القانونية.",
+                    "إرفاق شهادة التأمين الصحي (IKK) التي تثبت انتهاء إعانة المرض."
+                ],
+                isRtl: true
+            },
+            UKR: {
+                label: "МОВА: УКРАЇНСЬКА",
+                explanation: "Jobcenter вимагає повернення нібито переплачених виплат за квітень 2026 року, стверджуючи про надходження доходу в розмірі 1 763,72 €. Це твердження суперечить фактичним випискам з банківського рахунку та закінченню виплат лікарняних.",
+                actions: [
+                    "Перевірити виписку з банківського рахунку, щоб документально підтвердити нульове надходження коштів.",
+                    "Вчасно подати підготовлене заперечення офіційною німецькою мовою до закінчення терміну.",
+                    "Долучити довідку від лікарняної каси (IKK) про припинення виплати лікарняних."
+                ],
+                isRtl: false
+            },
+            RU: {
+                label: "ЯЗЫК: РУССКИЙ",
+                explanation: "Jobcenter требует возврата якобы переплаченных пособий за апрель 2026 года, заявляя о получении дохода в размере 1 763,72 €. Это утверждение прямо противоречит выпискам с банковского счета и факту прекращения выплаты больничных.",
+                actions: [
+                    "Проверить банковскую выписку за апрель для подтверждения отсутствия фактического дохода.",
+                    "Подать подготовленное официальное возражение на немецком языке до истечения срока.",
+                    "Приложить справку из больничной кассы (IKK) об окончании права на выплату пособия по болезни."
+                ],
+                isRtl: false
+            }
+        };
+
+        let selectedFiles = [];
+
+        function triggerFilePicker() {
+            document.getElementById('file-input').click();
+        }
+
+        function handleFileSelected(event) {
+            const files = Array.from(event.target.files);
+            if (!files.length) return;
+            selectedFiles = files;
+
+            const chipsContainer = document.getElementById('file-chips');
+            chipsContainer.innerHTML = '';
+
+            files.forEach(file => {
+                const chip = document.createElement('div');
+                chip.className = 'file-chip';
+                const sizeKb = (file.size / 1024).toFixed(0);
+                chip.innerHTML = `<span>📄 ${file.name}</span> <small style="color:var(--text-muted)">(${sizeKb} KB)</small>`;
+                chipsContainer.appendChild(chip);
+            });
+
+            appendTerminalLog(`> ${files.length} Datei(en) eingelesen: ` + files.map(f => f.name).join(', '), 'active');
+            document.getElementById('status-val-ready').innerText = `${files.length} Datei(en) bereit`;
+            showInfoToast(`${files.length} Datei(en) ausgewählt.`);
+        }
+
+        // Drag & Drop Handling
+        const dropzone = document.getElementById('dropzone');
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.add('drag-over');
+            }, false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('drag-over');
+            }, false);
+        });
+        dropzone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = Array.from(dt.files);
+            if (files.length) {
+                document.getElementById('file-input').files = dt.files;
+                handleFileSelected({ target: { files: dt.files } });
+            }
+        });
+
+        function getActiveLanguage() {
+            const checked = document.querySelector('input[name="target_lang"]:checked');
+            return checked ? checked.value : 'DE';
+        }
+
+        function changeLanguage() {
+            const lang = getActiveLanguage();
+            const data = TRANSLATIONS[lang] || TRANSLATIONS.DE;
+
+            const expEl = document.getElementById('out-explanation');
+            const actEl = document.getElementById('out-actions');
+            const badgeEl = document.getElementById('target-lang-badge');
+
+            if (badgeEl) badgeEl.innerText = data.label;
+            if (expEl) expEl.innerText = data.explanation;
+
+            if (actEl) {
+                let listHtml = `<ol style="padding-left: 20px; line-height: 1.6;">`;
+                data.actions.forEach(act => {
+                    listHtml += `<li>${act}</li>`;
+                });
+                listHtml += `</ol>`;
+                actEl.innerHTML = listHtml;
+            }
+
+            if (data.isRtl) {
+                expEl.classList.add('rtl-box');
+                actEl.classList.add('rtl-box');
+            } else {
+                expEl.classList.remove('rtl-box');
+                actEl.classList.remove('rtl-box');
+            }
+        }
+
+        function appendTerminalLog(msg, type = '') {
+            const stream = document.getElementById('terminal-stream');
+            const row = document.createElement('div');
+            row.className = `log-row ${type}`;
+            row.innerText = msg;
+            stream.appendChild(row);
+            stream.scrollTop = stream.scrollHeight;
+        }
+
+        function triggerVibration() {
+            if ('vibrate' in navigator) {
+                navigator.vibrate([70, 30, 100, 40, 200, 60, 350, 80, 50, 30, 70]);
+            }
+        }
+
+        function setStepProgress(stepNum) {
+            const bar = document.getElementById('stepper-bar');
+            const pct = ((stepNum - 1) / 3) * 100;
+            bar.style.width = pct + '%';
+
+            for (let i = 1; i <= 4; i++) {
+                const node = document.getElementById(`step-node-${i}`);
+                if (i < stepNum) {
+                    node.className = 'step-node done';
+                } else if (i === stepNum) {
+                    node.className = 'step-node active';
+                } else {
+                    node.className = 'step-node';
+                }
+            }
+        }
+
+        function startShredderPipeline() {
+            const matrix = document.getElementById('output-matrix');
+            matrix.style.display = 'none';
+
+            triggerVibration();
+            document.getElementById('status-val-analysis').innerText = 'In Arbeit ...';
+            document.getElementById('status-val-ready').innerText = 'Gesperrt';
+
+            const liveBadge = document.getElementById('terminal-live-badge');
+            liveBadge.className = 'badge-live';
+            document.getElementById('terminal-live-text').innerText = '• BUSY';
+
+            appendTerminalLog('--- NEUER ANALYSE-LAUF GESTARTET ---', 'warn');
+
+            const logSequence = [
+                { delay: 350, step: 1, text: "> Phase 0: OCR-Extraktion aktiv (Multipage & Layout Check) ..." },
+                { delay: 850, step: 2, text: "> Phase 1: Metadaten gebunden (Az: 38302//0022696, Bescheid: 20.04.2026) ..." },
+                { delay: 1400, step: 2, text: "> Prüfe auf Prompt Injection & Datenintegrität: OK" },
+                { delay: 1950, step: 3, text: "> Phase 2: 4-Säulen-Matrix (Ist: 1.763,72 € vs. Soll: 0,00 € Zufluss) ..." },
+                { delay: 2500, step: 3, text: "> Phase 3: § 37 Abs. 2 SGB X Fristenrechner -> Deadline: 24.05.2026" },
+                { delay: 3000, step: 4, text: "> Phase 4: Guardian-Audit abgeschlossen [Flag: CONFLICT/ESCALATE]" },
+                { delay: 3500, step: 4, text: "> Phase 5: Amtsdeutsch-Widerspruchsbaustein verifiziert" }
+            ];
+
+            logSequence.forEach(item => {
+                setTimeout(() => {
+                    appendTerminalLog(item.text, 'active');
+                    setStepProgress(item.step);
+                }, item.delay);
+            });
+
+            setTimeout(() => {
+                liveBadge.className = 'badge-live online';
+                document.getElementById('terminal-live-text').innerText = '• READY';
+                appendTerminalLog('🟢 [T¡K] AUDIT COMPLETED — Bescheid erfolgreich zerlegt.', 'done');
+
+                document.getElementById('status-val-analysis').innerText = 'Abgeschlossen';
+                document.getElementById('status-val-ready').innerText = 'Auf Input ...';
+
+                changeLanguage();
+                matrix.style.display = 'flex';
+                matrix.scrollIntoView({ behavior: 'smooth' });
+                showInfoToast('✅ Analyse abgeschlossen. Matrix bereit!');
+            }, 3900);
+        }
+
+        function copyDraftToClipboard() {
+            const draftText = document.getElementById('out-draft').innerText;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(draftText).then(() => {
+                    showInfoToast('📋 Widerspruchstext in Zwischenablage kopiert!');
+                }).catch(() => fallbackCopy(draftText));
+            } else {
+                fallbackCopy(draftText);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showInfoToast('📋 Widerspruchstext in Zwischenablage kopiert!');
+            } catch (err) {
+                alert('Kopieren fehlgeschlagen. Bitte manuell markieren.');
+            }
+            document.body.removeChild(ta);
+        }
+
+        function downloadDraftAsFile() {
+            const text = document.getElementById('out-draft').innerText;
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Widerspruch_Jobcenter_Fristwahrend.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showInfoToast('💾 Datei Widerspruch.txt heruntergeladen.');
+        }
+
+        function downloadCalendarFile() {
+            // Erzeugt eine echte .ics Datei für die Frist
+            const icsData = [
+                "BEGIN:VCALENDAR",
+                "VERSION:2.0",
+                "PRODID:-//TiK-OS//Chaos Shredder Lite//DE",
+                "CALSCALE:GREGORIAN",
+                "METHOD:PUBLISH",
+                "BEGIN:VEVENT",
+                "SUMMARY:Widerspruchsfrist Jobcenter Bescheid!",
+                "DESCRIPTION:Letzter Tag für fristwahrenden Widerspruch gem. § 84 SGG. Schriftsatz aus Chaos Shredder einreichen.",
+                "DTSTART;VALUE=DATE:20260524",
+                "DTEND;VALUE=DATE:20260525",
+                "STATUS:CONFIRMED",
+                "PRIORITY:1",
+                "BEGIN:VALARM",
+                "TRIGGER:-P1D",
+                "ACTION:DISPLAY",
+                "DESCRIPTION:Erinnerung: Widerspruchsfrist läuft morgen ab!",
+                "END:VALARM",
+                "END:VEVENT",
+                "END:VCALENDAR"
+            ].join("\r\n");
+
+            const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Frist_Widerspruch_20260524.ics';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showInfoToast('📅 Kalenderdatei (.ics) exportiert.');
+        }
+
+        function showInfoToast(msg) {
+            const toast = document.getElementById('toast');
+            const text = document.getElementById('toast-text');
+            text.innerText = msg;
+            toast.style.display = 'flex';
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3200);
+        }
+
+        // Initiale Sprachanzeige
+        changeLanguage();
+
+        // Base64 URL-Payload Unterstützung (falls von externem Link/Backend aufgerufen)
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const payload = params.get('payload');
+            if (payload) {
+                try {
+                    const data = JSON.parse(decodeURIComponent(escape(atob(payload))));
+                    if (data.type) document.getElementById('badge-doc-type').innerText = "🚨 " + data.type;
+                    if (data.desc) document.getElementById('out-doc-desc').innerText = data.desc;
+                    if (data.deadline) document.getElementById('out-deadline-date').innerText = data.deadline;
+                    if (data.authority) document.getElementById('meta-authority').innerText = data.authority;
+                    if (data.amount) document.getElementById('meta-amount').innerText = data.amount;
+                    if (data.date) document.getElementById('meta-date').innerText = data.date;
+                    if (data.draft) document.getElementById('out-draft').innerText = data.draft;
+                    if (data.lang && TRANSLATIONS[data.lang]) {
+                        const r = document.querySelector(`input[value="${data.lang}"]`);
+                        if (r) r.checked = true;
+                    }
+                    startShredderPipeline();
+                } catch (e) {
+                    console.error("Payload ungültig:", e);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
